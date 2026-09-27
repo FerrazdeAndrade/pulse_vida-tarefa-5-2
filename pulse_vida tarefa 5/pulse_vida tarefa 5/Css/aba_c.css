@@ -1,0 +1,135 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f7f6;
+  margin: 0;
+  padding: 0;
+  zoom: 0.85; 
+}
+
+header {
+  background-color: whitesmoke;
+  padding: 20px 40px;
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+  color: blue;
+}
+
+nav {
+  background-color: rgb(221, 221, 221);
+  padding: 10px 20px;
+  border-radius: 35px;
+  word-spacing: 10px;
+}
+
+nav > a {
+  color: blue;
+  text-decoration: none;
+  font-size: 18px;
+  padding: 10px 15px;
+  border-radius: 20px;
+  transition: 0.3s;
+}
+
+nav a:hover {
+  background-color: #99cdf8;
+  color: rgb(0, 17, 255);
+}
+
+.pulse {
+  text-decoration: none;
+  color: blue;
+}
+
+.pulse:hover {
+  color: rgb(63, 176, 228);
+}
+
+/* Centralização e Estilo do Conteúdo Principal */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.titulo {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.card-formulario, .card-lista {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 25px;
+}
+
+form input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+form button {
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+form button:hover {
+  background-color: #0056b3;
+}
+
+.card-lista h2 {
+  font-size: 20px;
+  color: #444;
+  margin-bottom: 15px;
+}
+
+#listaAgendamentos {
+  list-style: none;
+  padding: 0;
+}
+
+#listaAgendamentos li {
+  background: #f9f9f9;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Estilo para transformar os links dos cards mantendo o design */
+.card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-link:hover {
+  transform: translateY(-5px);
+}
+
+.card-link:hover .card {
+  box-shadow: 0px 6px 20px rgba(0, 123, 255, 0.15);
+  border-color: #007bff;
+}

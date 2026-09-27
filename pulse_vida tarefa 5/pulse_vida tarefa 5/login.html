@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="Css/login.css">
+  <title>PulseVida - Login</title>
+</head>
+<body>
+
+  <!-- Lado esquerdo com a imagem da médica -->
+  <div class="imagem-lateral"></div>
+
+  <!-- Lado direito com o formulário de login -->
+  <div class="login-wrapper">
+    <div class="login-container">
+      <div class="logo-container">
+        <h2>PulseVida ❤️</h2>
+      </div>
+
+      <h2>Login</h2>
+
+      <form id="formLogin">
+        <input type="text" id="loginUsuario" placeholder="Usuário" required>
+        <input type="password" id="loginSenha" placeholder="Senha" required>
+        <button type="submit">Entrar</button>
+      </form>
+
+      <p class="cadastro-link">
+        Não tem conta? <a href="tela_cadastro.html">Cadastrar</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Botão Flutuante no Canto Inferior Direito para Retornar à Página Principal -->
+  <a href="index.html" style="position: fixed; bottom: 20px; right: 20px; background-color: #007bff; color: white; padding: 12px 18px; border-radius: 30px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 1000; display: flex; align-items: center; gap: 8px; font-family: Arial, sans-serif;">
+    ⬅ Início
+  </a>
+
+<script>
+document.getElementById("formLogin").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const usuarioDigitado = document.getElementById("loginUsuario").value.trim();
+  const senhaDigitada = document.getElementById("loginSenha").value.trim();
+
+  const usuariosCadastrados = JSON.parse(localStorage.getItem("usuariosCadastrados")) || [];
+
+  const usuarioEncontrado = usuariosCadastrados.find(user => 
+    user.usuario === usuarioDigitado && user.senha === senhaDigitada
+  );
+
+  if (usuarioEncontrado) {
+    localStorage.setItem("logado", "true");
+    localStorage.setItem("usuarioAtivo", usuarioEncontrado.usuario);
+    
+    alert("Login realizado com sucesso!");
+    window.location.href = "aba_c.html";
+  } else {
+    alert("Usuário ou senha incorretos, ou conta não cadastrada!");
+  }
+});
+</script>
+
+</body>
+</html>

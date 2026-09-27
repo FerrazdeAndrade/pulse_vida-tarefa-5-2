@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="Css/style.css">
+  <title>PulseVida - Agendamento</title>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">
+    <img src="imagens/logo_pulsevida.png" alt="PulseVida">
+  </a>
+</header>
+
+<main style="padding: 30px; max-width: 700px; margin: 0 auto; font-family: Arial, sans-serif;">
+  
+  <h2 style="text-align: center; color: #333; margin-bottom: 20px;">Agendamento de Consultas</h2>
+
+  <!-- Card do Formulário -->
+  <div style="background: #ffffff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #ddd;">
+    
+    <p id="unidadeSelecionadaTexto" style="margin-bottom: 20px; font-size: 15px; color: #555;">
+      Unidade Selecionada: Carregando...
+    </p>
+
+    <!-- NOME PACIENTE -->
+    <label style="display: block; margin-top: 12px; font-weight: bold; color: #333;">NOME PACIENTE:</label>
+    <input type="text" id="nomePaciente" placeholder="Nome completo do paciente" style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+
+    <!-- CPF -->
+    <label style="display: block; margin-top: 12px; font-weight: bold; color: #333;">CPF:</label>
+    <input type="text" id="cpfPaciente" placeholder="000.000.000-00" style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+
+    <!-- Nº SUS -->
+    <label style="display: block; margin-top: 12px; font-weight: bold; color: #333;">Nº SUS:</label>
+    <input type="text" id="susPaciente" placeholder="Número do cartão do SUS" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+
+    <!-- ESPECIALIDADE HIPERTENSÃO -->
+    <label style="display: block; margin-top: 12px; font-weight: bold; color: #333;">ESPECIALIDADE HIPERTENSÃO:</label>
+    <input type="text" id="especialidade" value="Hipertensão" readonly style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; background-color: #f1f3f5; color: #495057; box-sizing: border-box;">
+
+    <!-- NOME MÉDICO -->
+    <label style="display: block; margin-top: 12px; font-weight: bold; color: #333;">NOME MÉDICO:</label>
+    <input type="text" id="nomeMedico" placeholder="Nome do médico responsável" style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+
+    <!-- DATA -->
+    <label style="display: block; margin-top: 12px; font-weight: bold; color: #333;">DATA:</label>
+    <input type="date" id="dataConsulta" style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+
+    <!-- HORÁRIO -->
+    <label style="display: block; margin-top: 12px; font-weight: bold; color: #333;">HORÁRIO:</label>
+    <input type="time" id="horarioConsulta" style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+
+    <!-- BOTÃO AGENDAR -->
+    <button onclick="realizarAgendamento()" style="margin-top: 20px; width: 100%; padding: 12px; background: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 16px;">
+      Agendar
+    </button>
+  </div>
+
+  <!-- SEÇÃO RETRÁTIL (ACORDEÃO) DE AGENDAMENTOS SALVOS -->
+  <div style="margin-top: 40px; border: 1px solid #ddd; border-radius: 8px; background: #fff; overflow: hidden;">
+    
+    <!-- Cabeçalho clicável para abrir/fechar -->
+    <div onclick="toggleAgendamentos()" style="padding: 15px 20px; background: #f1f3f5; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none;">
+      <h3 style="color: #333; margin: 0; font-size: 18px;">Agendamentos Salvos</h3>
+      <span id="iconeSeta" style="font-weight: bold; font-size: 16px; color: #555;">▼</span>
+    </div>
+
+    <!-- Conteúdo da lista (inicialmente oculto ou visível) -->
+    <div id="containerAgendamentos" style="padding: 20px; display: none;">
+      <div id="listaAgendamentos"></div>
+    </div>
+    
+  </div>
+
+</main>
+
+<!-- Botão Flutuante no Canto Inferior Direito para Retornar -->
+<a href="index.html" style="position: fixed; bottom: 20px; right: 20px; background-color: #007bff; color: white; padding: 12px 18px; border-radius: 30px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 1000; display: flex; align-items: center; gap: 8px;">
+  ⬅ Início
+</a>
+
+<script>
+// Carregar o hospital selecionado anteriormente e listar agendamentos salvos
+window.onload = function() {
+  let solicitacoes = JSON.parse(localStorage.getItem("solicitacoes")) || [];
+  
+  if(solicitacoes.length > 0) {
+    let ultima = solicitacoes[solicitacoes.length - 1];
+    const elem = document.getElementById("unidadeSelecionadaTexto");
+    if(elem) {
+      elem.innerHTML = "Unidade Selecionada: <strong>" + (ultima.hospital || "Unidade Principal (Saquarema)") + "</strong>";
+    }
+  } else {
+    const elem = document.getElementById("unidadeSelecionadaTexto");
+    if(elem) {
+      elem.innerHTML = "Unidade Selecionada: <strong>Unidade Principal (Saquarema)</strong>";
+    }
+  }
+  
+  atualizarLista();
+};
+
+// Função para abrir e fechar a seção de agendamentos salvos
+function toggleAgendamentos() {
+  const container = document.getElementById("containerAgendamentos");
+  const seta = document.getElementById("iconeSeta");
+
+  if (container.style.display === "none") {
+    container.style.display = "block";
+    seta.innerText = "▲";
+  } else {
+    container.style.display = "none";
+    seta.innerText = "▼";
+  }
+}
+
+function realizarAgendamento() {
+  const nome = document.getElementById("nomePaciente").value;
+  const cpf = document.getElementById("cpfPaciente").value;
+  const sus = document.getElementById("susPaciente").value;
+  const especialidade = document.getElementById("especialidade").value;
+  const medico = document.getElementById("nomeMedico").value;
+  const data = document.getElementById("dataConsulta").value;
+  const horario = document.getElementById("horarioConsulta").value;
+
+  if (!nome || !cpf || !sus || !medico || !data || !horario) {
+    alert("Por favor, preencha todos os campos do formulário.");
+    return;
+  }
+
+  let solicitacoes = JSON.parse(localStorage.getItem("solicitacoes")) || [];
+
+  let novoAgendamento = {
+    nomePaciente: nome,
+    cpf: cpf,
+    sus: sus,
+    especialidade: especialidade,
+    nomeMedico: medico,
+    dataConsulta: data,
+    horarioConsulta: horario,
+    status: "Agendado",
+    hospital: "Unidade Principal (Saquarema)"
+  };
+
+  solicitacoes.push(novoAgendamento);
+
+  localStorage.setItem("solicitacoes", JSON.stringify(solicitacoes));
+
+  alert("Consulta agendada e salva com sucesso!");
+  
+  document.getElementById("nomePaciente").value = "";
+  document.getElementById("cpfPaciente").value = "";
+  document.getElementById("susPaciente").value = "";
+  document.getElementById("nomeMedico").value = "";
+  document.getElementById("dataConsulta").value = "";
+  document.getElementById("horarioConsulta").value = "";
+
+  atualizarLista();
+}
+
+function atualizarLista() {
+  let solicitacoes = JSON.parse(localStorage.getItem("solicitacoes")) || [];
+  const container = document.getElementById("listaAgendamentos");
+  container.innerHTML = "";
+
+  let temAgendamento = false;
+
+  solicitacoes.forEach((item) => {
+    if(item.nomePaciente) {
+      temAgendamento = true;
+      container.innerHTML += `
+        <div style="background: #f8f9fa; padding: 15px; margin-bottom: 10px; border-radius: 6px; border-left: 4px solid #28a745;">
+          <p style="margin: 0 0 5px 0;"><strong>Paciente:</strong> ${item.nomePaciente} | <strong>CPF:</strong> ${item.cpf}</p>
+          <p style="margin: 0 0 5px 0;"><strong>SUS:</strong> ${item.sus} | <strong>Médico:</strong> ${item.nomeMedico}</p>
+          <p style="margin: 0;"><strong>Data:</strong> ${item.dataConsulta} às ${item.horarioConsulta} | <strong>Unidade:</strong> ${item.hospital || "Não especificada"}</p>
+        </div>
+      `;
+    }
+  });
+
+  if (!temAgendamento) {
+    container.innerHTML = "<p style='color: #666; text-align: center; margin: 0;'>Nenhum agendamento salvo no momento.</p>";
+  }
+}
+</script>
+
+</body>
+</html>
