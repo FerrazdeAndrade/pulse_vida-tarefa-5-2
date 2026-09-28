@@ -1,14 +1,25 @@
-import os
 import qrcode
 
-# Garante que a pasta 'imagens' existe no diretório atual
-os.makedirs("imagens", exist_ok=True)
+# URL do seu repositório ou página do projeto
+url_repositorio = "https://github.com/FerrazdeAndrade/pulse-vida-tarefa-5.git"
 
-# Link público completo para o GitHub Pages do Pulse Vida
-url_projeto = "https://FerrazdeAndrade.github.io/pulse_vida/"
+# Configurações do QR Code
+qr = qrcode.QRCode(
+    version=1,
+    error_correction=qrcode.constants.ERROR_CORRECT_M,
+    box_size=10,
+    border=4,
+)
 
-# Gera e salva o QR Code dentro da pasta imagens
-img = qrcode.make(url_projeto)
-img.save("imagens/qrcode_pulsevida.png")
+# Adiciona os dados (URL)
+qr.add_data(url_repositorio)
+qr.make(fit=True)
 
-print("Sucesso! O QR Code do Pulse Vida foi gerado na pasta 'imagens/qrcode_pulsevida.png'.")
+# Cria a imagem do QR Code
+img = qr.make_image(fill_color="black", back_color="white")
+
+# Salva a imagem na pasta do projeto
+nome_arquivo = "qrcode_pulse_vida.png"
+img.save(nome_arquivo)
+
+print(f"Sucesso! QR Code gerado e salvo como '{nome_arquivo}'.")
