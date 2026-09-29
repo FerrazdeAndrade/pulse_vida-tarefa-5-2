@@ -21,8 +21,9 @@
       <h2>Login</h2>
 
       <form id="formLogin">
-        <input type="text" id="loginUsuario" placeholder="Usuário" required>
-        <input type="password" id="loginSenha" placeholder="Senha" required>
+        <!-- Adicionado autocomplete="off" para ajudar a limpar o preenchimento automático -->
+        <input type="text" id="loginUsuario" placeholder="Usuário" autocomplete="off" required>
+        <input type="password" id="loginSenha" placeholder="Senha" autocomplete="new-password" required>
         <button type="submit">Entrar</button>
       </form>
 
@@ -54,6 +55,9 @@ document.getElementById("formLogin").addEventListener("submit", function(e) {
     localStorage.setItem("logado", "true");
     localStorage.setItem("usuarioAtivo", usuarioEncontrado.usuario);
     
+    // Limpa os campos do formulário antes de mudar de página
+    document.getElementById("formLogin").reset();
+
     alert("Login realizado com sucesso!");
     window.location.href = "aba_c.html";
   } else {
