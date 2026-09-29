@@ -5,6 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="Css/login.css">
   <title>PulseVida - Login</title>
+  <style>
+    .password-container {
+      position: relative;
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
+    .password-container input {
+      width: 100%;
+      padding-right: 45px !important;
+    }
+    /* Usamos span para evitar qualquer conflito com estilos globais de botões do login.css */
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      background: none !important;
+      border: none !important;
+      box-shadow: none !important;
+      cursor: pointer;
+      font-size: 1.2rem;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      width: auto !important;
+      height: auto !important;
+    }
+  </style>
 </head>
 <body>
 
@@ -21,11 +50,21 @@
       <h2>Login</h2>
 
       <form id="formLogin">
-        <!-- Adicionado autocomplete="off" para ajudar a limpar o preenchimento automático -->
         <input type="text" id="loginUsuario" placeholder="Usuário" autocomplete="off" required>
-        <input type="password" id="loginSenha" placeholder="Senha" autocomplete="new-password" required>
+        
+        <!-- Campo de senha com o ícone em span -->
+        <div class="password-container">
+          <input type="password" id="loginSenha" placeholder="Senha" autocomplete="new-password" required>
+          <span id="btnToggleSenha" class="toggle-password" onclick="toggleSenha()">👁️</span>
+        </div>
+
         <button type="submit">Entrar</button>
       </form>
+
+      <!-- Link para recuperar a senha -->
+      <p class="cadastro-link" style="margin-top: 10px;">
+        <a href="recuperar_senha.html">Esqueci a senha?</a>
+      </p>
 
       <p class="cadastro-link">
         Não tem conta? <a href="tela_cadastro.html">Cadastrar</a>
@@ -39,31 +78,43 @@
   </a>
 
 <script>
-document.getElementById("formLogin").addEventListener("submit", function(e) {
-  e.preventDefault();
+  function toggleSenha() {
+    const inputSenha = document.getElementById("loginSenha");
+    const spanToggle = document.getElementById("btnToggleSenha");
 
-  const usuarioDigitado = document.getElementById("loginUsuario").value.trim();
-  const senhaDigitada = document.getElementById("loginSenha").value.trim();
-
-  const usuariosCadastrados = JSON.parse(localStorage.getItem("usuariosCadastrados")) || [];
-
-  const usuarioEncontrado = usuariosCadastrados.find(user => 
-    user.usuario === usuarioDigitado && user.senha === senhaDigitada
-  );
-
-  if (usuarioEncontrado) {
-    localStorage.setItem("logado", "true");
-    localStorage.setItem("usuarioAtivo", usuarioEncontrado.usuario);
-    
-    // Limpa os campos do formulário antes de mudar de página
-    document.getElementById("formLogin").reset();
-
-    alert("Login realizado com sucesso!");
-    window.location.href = "aba_c.html";
-  } else {
-    alert("Usuário ou senha incorretos, ou conta não cadastrada!");
+    if (inputSenha.type === "password") {
+      inputSenha.type = "text";
+      spanToggle.textContent = "🙈";
+    } else {
+      inputSenha.type = "password";
+      spanToggle.textContent = "👁️";
+    }
   }
-});
+
+  document.getElementById("formLogin").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const usuarioDigitado = document.getElementById("loginUsuario").value.trim();
+    const senhaDigitada = document.getElementById("loginSenha").value.trim();
+
+    const usuariosCadastrados = JSON.parse(localStorage.getItem("usuariosCadastrados")) || [];
+
+    const usuarioEncontrado = usuariosCadastrados.find(user => 
+      user.usuario === usuarioDigitado && user.senha === senhaDigitada
+    );
+
+    if (usuarioEncontrado) {
+      localStorage.setItem("logado", "true");
+      localStorage.setItem("usuarioAtivo", usuarioEncontrado.usuario);
+      
+      document.getElementById("formLogin").reset();
+
+      alert("Login realizado com sucesso!");
+      window.location.href = "aba_c.html";
+    } else {
+      alert("Usuário ou senha incorretos, ou conta não cadastrada!");
+    }
+  });
 </script>
 
 </body>
